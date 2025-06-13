@@ -1,0 +1,21 @@
+Episode 320/1000 - Reward: 231.10, Epsilon: 0.100
+Episode 321/1000 - Reward: 747.52, Epsilon: 0.100
+Episode 322/1000 - Reward: 786.99, Epsilon: 0.100
+Episode 323/1000 - Reward: 582.49, Epsilon: 0.100
+Episode 324/1000 - Reward: 354.25, Epsilon: 0.100
+Episode 325/1000 - Reward: 563.64, Epsilon: 0.100
+Episode 326/1000 - Reward: 416.45, Epsilon: 0.100
+Episode 327/1000 - Reward: 601.64, Epsilon: 0.100
+Episode 328/1000 - Reward: 878.57, Epsilon: 0.100
+Episode 329/1000 - Reward: 329.49, Epsilon: 0.100
+Episode 330/1000 - Reward: 878.95, Epsilon: 0.100
+Episode 331/1000 - Reward: 226.73, Epsilon: 0.100
+Episode 332/1000 - Reward: 253.85, Epsilon: 0.100
+Episode 333/1000 - Reward: 434.16, Epsilon: 0.100
+Episode 334/1000 - Reward: 433.57, Epsilon: 0.100
+Episode 335/1000 - Reward: 471.87, Epsilon: 0.100
+Episode 336/1000 - Reward: 196.20, Epsilon: 0.100
+Episode 337/1000 - Reward: 398.07, Epsilon: 0.100
+Episode 338/1000 - Reward: 905.00, Epsilon: 0.100
+
+905 is a hard score even to achieve by a human
