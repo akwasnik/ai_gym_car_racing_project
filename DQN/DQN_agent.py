@@ -137,7 +137,7 @@ def play():
 parser = argparse.ArgumentParser()
 parser.add_argument('--mode', choices=['train', 'play', 'resume'], default='train',
                     help="'resume' will continue training from the last saved checkpoint")
-parser.add_argument('--episodes', type=int, default=200)
+parser.add_argument('--episodes', type=int, default=800)
 args = parser.parse_args()
 
 if args.mode == 'train':
