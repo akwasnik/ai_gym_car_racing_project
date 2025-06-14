@@ -1,4 +1,4 @@
-# Auto-generated requirements for your AI project
+gymnasium[other]
 gymnasium[box2d]
 stable-baselines3
 torch
