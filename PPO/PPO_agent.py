@@ -59,6 +59,9 @@ parser.add_argument('--model_dir', type=str, default='models',
                     help="Directory to save and load model checkpoints.")
 parser.add_argument('--resume', action='store_true',
                     help="Resume training from the latest checkpoint in model_dir.")
+parser.add_argument('--model_name', type=str, default=None,
+                    help="(play mode) Filename of the model (with or without .zip) to load. If omitted, loads latest.")
+
 args = parser.parse_args()
 
 if args.mode == 'train':
@@ -108,9 +111,16 @@ else:  # play mode
     env = DummyVecEnv([lambda: make_env(render_mode='human')])
     env = VecFrameStack(env, n_stack=4)
 
-    latest_model = find_latest_model(args.model_dir)
-    model = PPO.load(latest_model, device='auto')
-    print(f"Loaded model: {latest_model}")
+    if args.model_name:
+        name = args.model_name if args.model_name.endswith('.zip') else args.model_name + '.zip'
+        model_path = os.path.join(args.model_dir, name)
+        if not os.path.isfile(model_path):
+            raise FileNotFoundError(f"Nie znaleziono pliku modelu: {model_path}")
+    else:
+        model_path = find_latest_model(args.model_dir)
+
+    model = PPO.load(model_path, device='auto')
+    print(f"Loaded model: {model_path}")
 
     obs = env.reset()
     while True:

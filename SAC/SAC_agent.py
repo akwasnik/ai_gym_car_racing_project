@@ -1,4 +1,4 @@
-import os
+import os,time
 import argparse
 import gymnasium as gym
 from stable_baselines3 import SAC
@@ -92,14 +92,21 @@ elif args.mode == 'resume':
     model.save(args.model_path)
 
 elif args.mode == 'play':
-    # Play a trained model
-    play_env = gym.make('CarRacing-v3', render_mode='human')
+    play_env = DummyVecEnv([make_env(render_mode='human')])
+    play_env = VecTransposeImage(play_env)
+    play_env = VecFrameStack(play_env, n_stack=4)
+
     model = SAC.load(args.model_path, device='auto')
-    obs, _ = play_env.reset()
+
+    obs = play_env.reset()
     done = False
-    state = obs
     while not done:
-        action, _ = model.predict(state, deterministic=True)
-        state, reward, terminated, truncated, _ = play_env.step(action)
-        done = terminated or truncated
+        action, _ = model.predict(obs, deterministic=True)
+        obs, rewards, dones, infos = play_env.step(action)
+
+        # dones jest wektorem (n_envs,). Przy DummyVecEnv n_envs == 1.
+        done = dones[0]
+        time.sleep(0.02)
+
     play_env.close()
+

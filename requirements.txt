@@ -4,3 +4,7 @@ stable-baselines3
 torch
 numpy
 pygame
+pygad
+matplotlib
+pyswarms
+scikit-fuzzy
