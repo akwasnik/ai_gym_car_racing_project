@@ -121,6 +121,25 @@ class PlotAndVideoCallback(BaseCallback):
             print(f"Saved learning curve plot at {plot_path}")
 
 
+class ProgressCallback(BaseCallback):
+    """
+    Callback for printing training progress every N timesteps.
+    """
+    def __init__(self, total_timesteps: int, print_freq: int = 10000, verbose: int = 1):
+        super().__init__(verbose)
+        self.total_timesteps = total_timesteps
+        self.print_freq = print_freq
+
+    def _on_step(self) -> bool:
+        # self.num_timesteps is updated inside BaseCallback
+        if self.num_timesteps % self.print_freq == 0:
+            remaining = self.total_timesteps - self.num_timesteps
+            if remaining < 0:
+                remaining = 0
+            print(f"[Progress] Timesteps {self.num_timesteps}/{self.total_timesteps} — {remaining} remaining")
+        return True
+
+
 def find_latest_model(model_dir: str, prefix: str = 'ppo_carracing') -> str:
     files = [f for f in os.listdir(model_dir) if f.startswith(prefix) and f.endswith('.zip')]
     if not files:
@@ -131,7 +150,7 @@ def find_latest_model(model_dir: str, prefix: str = 'ppo_carracing') -> str:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description="PPO training for CarRacing-v3 with plots and video recordings."
+        description="PPO training for CarRacing-v3 with plots, videos, and progress prints."
     )
     parser.add_argument('--mode', choices=['train', 'play'], default='train',
                         help="Select 'train' to train or resume training, 'play' to render using a trained model.")
@@ -145,6 +164,8 @@ if __name__ == '__main__':
                         help="Resume training from the latest checkpoint in model_dir.")
     parser.add_argument('--model_name', type=str, default=None,
                         help="(play mode) Filename of the model (with or without .zip) to load. If omitted, loads latest.")
+    parser.add_argument('--print_freq', type=int, default=10000,
+                        help="How many timesteps between progress prints.")
 
     args = parser.parse_args()
 
@@ -161,9 +182,13 @@ if __name__ == '__main__':
         )
         plot_vid_cb = PlotAndVideoCallback(
             save_path=args.model_dir,
-            reward_threshold=800.0
+            reward_threshold=914
         )
-        callback = CallbackList([save_cb, plot_vid_cb])
+        prog_cb = ProgressCallback(
+            total_timesteps=args.timesteps,
+            print_freq=args.print_freq
+        )
+        callback = CallbackList([save_cb, plot_vid_cb, prog_cb])
 
         if args.resume:
             latest_model = find_latest_model(args.model_dir)

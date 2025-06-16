@@ -126,6 +126,19 @@ def train(resume: bool = False):
         history["mean"].append(np.mean(ga.last_generation_fitness))
         pickle.dump(history, open(METRICS_FILE, "wb"))
 
+        # --- rysowanie wykresu po każdej generacji
+        plt.figure()
+        plt.plot(history["best"], label="Best fitness")
+        plt.plot(history["mean"], label="Mean fitness")
+        plt.xlabel("Generation")
+        plt.ylabel("Fitness")
+        plt.title(f"Training curve up to generation {g+1}")
+        plt.grid(True)
+        plt.legend()
+        plt.tight_layout()
+        plt.savefig(f"fitness_curve_gen_{g:03}.png")
+        plt.close()
+
         # --- timing & ETA
         gen_time = time.time() - gen_start
         gen_times.append(gen_time)
@@ -141,7 +154,7 @@ def train(resume: bool = False):
 
     # ------------ instancja GA --------------------------------
     ga = pygad.GA(
-        num_generations       = 200,        # 🔧 zmień według potrzeb
+        num_generations       = 100,
         sol_per_pop           = len(population),
         num_parents_mating    = 5,
         num_genes             = gene_count,
@@ -154,13 +167,16 @@ def train(resume: bool = False):
 
     ga.run()
 
-    # ------------------- wykres ------------------------------
+    # ------------------- końcowy wykres ------------------------------
     plt.figure()
     plt.plot(history["best"], label="Best fitness")
     plt.plot(history["mean"], label="Mean fitness")
-    plt.xlabel("Generation"); plt.ylabel("Fitness")
+    plt.xlabel("Generation")
+    plt.ylabel("Fitness")
     plt.title("GA training curve")
-    plt.grid(True); plt.legend(); plt.tight_layout()
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
     plt.savefig("fitness_curve.png")
     print("Wykres zapisany ➜ fitness_curve.png")
 

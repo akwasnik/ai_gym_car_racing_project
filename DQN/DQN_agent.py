@@ -20,7 +20,7 @@ class DQN(nn.Module):
         )
 
     def forward(self, x):
-        x = x.float() / 255.0  # normalize pixel values to [0,1]
+        x = x.float() / 255.0
         return self.net(x)
 
 acts = [
@@ -31,8 +31,6 @@ acts = [
     np.array([1.0, 0.0, 0.0], dtype=np.float32),
     np.array([-1.0, 0.5, 0.0], dtype=np.float32),
     np.array([1.0, 0.5, 0.0], dtype=np.float32),
-    np.array([-1.0, 1.0, 0.0], dtype=np.float32),
-    np.array([1.0, 1.0, 0.0], dtype=np.float32)
 ]
 
 def train(episodes=200, resume=False):
@@ -41,8 +39,6 @@ def train(episodes=200, resume=False):
 
     net = DQN(len(acts)).to(device)
     tgt = DQN(len(acts)).to(device)
-
-    # optionally resume from saved model
     if resume:
         if os.path.exists('models/dqn_carracing_200.pth'):
             net.load_state_dict(torch.load('models/dqn_carracing_200.pth', map_location=device))
@@ -50,7 +46,6 @@ def train(episodes=200, resume=False):
         else:
             print('No checkpoint found at dqn_carracing_200.pth, starting fresh training.')
     
-    # initialize target network
     tgt.load_state_dict(net.state_dict())
 
     opt = optim.Adam(net.parameters(), lr=1e-4)
