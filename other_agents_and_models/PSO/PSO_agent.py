@@ -86,7 +86,7 @@ def train():
     print(f"Zapisano model ➜ models/pso_pyswarms_model.pth")
 
 # Odtwarzanie przejazdu
-def play(path="models/pso_pyswarms_model.pth"):
+def play(path="models/dqn_carracing_1000.pth"):
     model = DQN()
     model.load_state_dict(torch.load(path))
     model.eval()
