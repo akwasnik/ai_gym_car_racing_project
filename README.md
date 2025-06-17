@@ -31,3 +31,14 @@ Once `swig` is installed, install the required Python packages:
 pip install -r requirements.txt
 ```
 
+### 4. How to run .py files
+
+Different scripts have different args however all of them are run with --mode flag
+
+--mode train (default)
+--mode resume (resumes training)
+--mode play (plays saved model)
+
+```bash
+python3 PPO_agent.py --mode play
+```
